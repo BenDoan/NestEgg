@@ -7,8 +7,13 @@ import Home from './Home.vue'
 import Budget from './Budget.vue'
 import Transactions from './Transactions.vue'
 
+import global from './global'
+
 Vue.use(VueResource);
 Vue.use(VueRouter);
+
+console.log(global);
+console.log(global.data);
 
 const router = new VueRouter({
     mode: "hash",
@@ -32,7 +37,8 @@ new Vue({
             "amount": "money",
             "desc": "text"
         },
-        rows: []
+        rows: [],
+        global: global
     },
     methods: {
         save: function () {
