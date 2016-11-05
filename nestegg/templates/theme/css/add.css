@@ -1,6 +1,16 @@
 /*=============================create page =====================================*/
+#existing_categories{
+	margin-top:100px!important;
+}
 
-
+.line_goal{
+	background-color:#006633!important;
+	margin-top:37px;
+	margin-bottom:30px;
+	height:3px;
+	width:80%;
+	float:right;
+}
 /*=============================end create page =====================================*/
 /*=============================bank page =====================================*/
 
@@ -27,7 +37,7 @@
 }
 .input_goal{
 	padding-left:30px;
-	padding-top:25px;
+	padding-top:10px;
 
 }
 
@@ -44,6 +54,8 @@
 
 .line{
 	background-color:#006633!important;
+	margin-top:37px;
+	margin-bottom:30px;
 	height:3px;
 	width:83%%;
 	float:right;
@@ -54,6 +66,8 @@
 }
 #holding{
 	float:none;
+	height:50px!important;
+	margin-bottom:40px!important;
 }
 
 /*=============================end bank page =====================================*/
@@ -92,7 +106,7 @@ footer{
 	color:white!important;
 }
 
-p{
+footer > p{
 	color:white!important;
 }
 
@@ -119,6 +133,11 @@ p{
 }
 */
 
+p{
+	font-size:15px!important;
+	margin-bottom:5px!important;
+
+}
 
 
 h1,h2,h3,h4,p,table{
