@@ -1,0 +1,132 @@
+/*=============================create page =====================================*/
+
+
+/*=============================end create page =====================================*/
+/*=============================bank page =====================================*/
+
+#boxy_box{
+	background-color:white!important;
+	padding:30px!important;
+	box-shadow:0 0 1em 0.5em green;
+	margin-top:80px;
+	margin-bottom:80px;
+
+}
+
+.table_form{
+	height:100px;
+	background-color:#F2F2F2;
+}
+.table_form > form{
+	padding-top:25px!important;
+}
+
+#goal_change{
+	border-radius:0px;
+	background-color:#006633!important;
+}
+.input_goal{
+	padding-left:30px;
+	padding-top:25px;
+
+}
+
+.entry_group{
+	padding-top:30px;
+}
+
+.label{
+	margin:0px;
+	margin-top:7px;
+	color:#006633!important;
+
+}
+
+.line{
+	background-color:#006633!important;
+	height:3px;
+	width:83%%;
+	float:right;
+}
+.main_head{
+	float:left;
+
+}
+#holding{
+	float:none;
+}
+
+/*=============================end bank page =====================================*/
+/*=============================signin page =====================================*/
+
+
+#signin_box{
+	background-color:white!important;
+	padding:30px!important;
+	box-shadow:0 0 1em 0.5em green;
+	width:400px;
+
+}
+
+.signin_label{
+	margin:0px;
+	margin-top:7px;
+	color:#006633!important;
+
+}
+.signin{
+	width:100%;
+	margin-bottom:7px;
+	color:black;
+}
+/*
+.container{
+	padding-top:800px!important;
+}
+*/
+footer{
+	background-color:#006633!important;
+	color:white
+}
+#footer-label{
+	color:white!important;
+}
+
+p{
+	color:white!important;
+}
+
+#footer_link{
+	color:white!important;
+}
+
+
+#submit{
+	margin-top:10px;
+	color:green!important;
+}
+
+
+.head{
+	width:30%;
+	/*float:left;*/
+}
+
+/*============================= signin page end =====================================*/
+/*
+.navbar-default.affix{
+	background-color:#006633!important;
+}
+*/
+
+
+
+h1,h2,h3,h4,p,table{
+	font-family: "Avenir Next Pro" !important;
+	color:green!important;
+}
+
+@font-face {
+	  font-family: 'Avenir Next Pro';
+		src: url("font/AvenirNextLTPro-Regular.otf"); /* File to be stored at your site */
+}
