@@ -1,0 +1,19 @@
+{
+    "year": 2016,
+    "month": "Nov",
+    "items": {
+        "utilities": {
+            "gas": {"max": 30, "type": "monthly"},
+            "electricity": {"max": 100, "type": "monthly"},
+            "rent": {"max": 700, "type": "monthly"}
+       },
+       "food": {
+            "groceries": {"max": 150, "type": "monthly"},
+            "restaurants": {"max": 75, "type": "monthly"}
+        },
+        "car": {
+            "gas": {"max": 50, "type": "monthly"},
+            "maintenance": {"max": 75, "type": "bucket", "bucket": "Car Maintenance"}
+        }
+    }
+}
