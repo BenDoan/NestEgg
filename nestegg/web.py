@@ -3,9 +3,11 @@ import os
 from flask import *
 from flask_sqlalchemy import SQLAlchemy
 
-from views import main, api
 from database import db
 from util import *
+
+from views.api import api
+from views.main import main
 
 
 app = Flask(__name__)
