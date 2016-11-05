@@ -1,4 +1,4 @@
-/*=============================create page =====================================*/
+/=============================create page =====================================*/
 #existing_categories{
 	margin-top:100px!important;
 }
@@ -10,6 +10,18 @@
 	height:3px;
 	width:80%;
 	float:right;
+}
+#goal_create{
+	width:150px!important;
+}
+#create_hold{
+	width:300px;
+	margin-bottom:75px!important;
+	margin-top:75px!important;
+
+}
+#cat_name{
+	text-align:center!important;
 }
 /*=============================end create page =====================================*/
 /*=============================bank page =====================================*/
@@ -55,13 +67,14 @@
 .line{
 	background-color:#006633!important;
 	margin-top:37px;
-	margin-bottom:30px;
+	margin-bottom:50px;
 	height:3px;
 	width:83%%;
 	float:right;
 }
 .main_head{
 	float:left;
+	margin-bottom:30px;
 
 }
 #holding{
@@ -143,6 +156,9 @@ p{
 h1,h2,h3,h4,p,table{
 	font-family: "Avenir Next Pro" !important;
 	color:green!important;
+}
+h2{
+	margin-top:60px;
 }
 
 @font-face {
