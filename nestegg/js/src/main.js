@@ -14,9 +14,6 @@ import global from './global'
 Vue.use(VueRouter);
 Vue.use(VueAxios, axios)
 
-console.log(global);
-console.log(global.data);
-
 const router = new VueRouter({
     mode: "hash",
     base: __dirname,
