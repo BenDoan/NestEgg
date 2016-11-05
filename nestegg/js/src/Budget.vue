@@ -7,19 +7,15 @@
                 <div class="input-group">
                 <span class="input-group-btn"><button class="btn btn-secondary" v-on:click="un_shunt(nam)"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span></button></span><input type="text" class="form-control" v-model="shunt.name"></input>
                 </div>
-            <table class="table table-hover">
-            <tbody>
-                    <template v-for="(row, i) in shunt.rows">
-                        <tr>
-                            <td><button v-on:click="remove(i)"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button></td>
-                            <td><input type="text" class="form-control" v-model="row.key"></input></td>
-                            <td><input type="text" class="form-control" v-model="row.type"></input></td>
-                            <td><input type="numeric" class="form-control" v-model="row.max"></input></td>
-                        </tr>
-                    </template>
-                    <tr><td><button v-on:click="add()">+</button></td></tr>
-                </tbody>
-            </table>
+                    <div class="form-inline" v-for="(row, i) in shunt.rows">
+                            <div class="input-group">
+                                <span class="input-group-btn"><button class="btn btn-secondary" v-on:click="remove(i)"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button></span>
+                                <input type="text" class="form-control" v-model="row.key"></input>
+                            </div>
+                            <input type="text" class="form-control" v-model="row.type"></input>
+                            <input type="numeric" class="form-control" v-model="row.max"></input>
+                    </div>
+                    <button class="btn btn-secondary" v-on:click="add()"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
             </template>
             <template v-if="edit != nam">
                 <h2><button v-on:click="do_shunt(nam)" class="btn btn-primary"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></button> {{nam}}</h2>
