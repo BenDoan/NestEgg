@@ -5,7 +5,11 @@
     <title>NestEgg</title>
   </head>
   <body>
-    <div id="app"></div>
+    <div id="app">
+        <h1>{{rows.length}}</h1>
+        <router-view class="view"></router-view>
+        <edi-table v-bind:keys="keys" v-bind:rows="rows" v-bind:notify="save"></edi-table>
+    </div>
     <script src="/static/dist/build.js"></script>
   </body>
 </html>
