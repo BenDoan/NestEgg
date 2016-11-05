@@ -26,11 +26,12 @@ def create_app():
 
 def setup_database(app):
     with app.app_context():
+        print "creating all"
+        db.drop_all()
         db.create_all()
 
 
 if __name__ == '__main__':
     app = create_app()
-    if not os.path.isfile('/tmp/test.db'):
-      setup_database(app)
+    setup_database(app)
     app.run(host="0.0.0.0")
