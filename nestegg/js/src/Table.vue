@@ -1,7 +1,7 @@
 <template>
     <div id="app">
         <h1>{{ title }}</h1>
-        <table>
+        <table class="table table-hover">
             <tr><th></th><th v-for="(type, key) in keys">{{ key }}</th></tr>
             <tr v-for="(row, i) in rows">
                 <td><button v-on:click="edit = i==edit ? null : i">{{ edit == i ? "done" : "edit" }}</button></td>

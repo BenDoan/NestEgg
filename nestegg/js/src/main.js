@@ -3,19 +3,20 @@ import VueResource from 'vue-resource'
 import VueRouter from 'vue-router'
 //import App from './App.vue'
 import Table from './Table.vue'
+import Home from './Home.vue'
+import Budget from './Budget.vue'
+import Transactions from './Transactions.vue'
 
 Vue.use(VueResource);
 Vue.use(VueRouter);
-
-const Home = { template: '<div><router-link to="/test">asdf</router-link></div>' };
-const Test = { template: '<div><router-link to="/">fdsa</router-link></div>' };
 
 const router = new VueRouter({
     mode: "hash",
     base: __dirname,
     routes: [
         { path:"/", component: Home },
-        { path:"/test", component: Test }
+        { path:"/budget", component: Budget },
+        { path:"/transactions", component: Transactions }
     ]
 });
 
