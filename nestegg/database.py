@@ -34,9 +34,11 @@ class BudgetItem(db.Model):
     bucket_id = db.Column(db.Integer, db.ForeignKey('bucket.id'), nullable=True)
     bucket = db.relationship('Bucket', backref=db.backref('BudgetItem', lazy='dynamic'))
 
-class Transaction(db.Model):
+class Trans(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(80), unique=True)
+    title = db.Column(db.String(80))
+    amount = db.Column(db.Float)
+    date = db.Column(db.Date)
 
     budget_item_id = db.Column(db.Integer, db.ForeignKey('budget_item.id'), nullable=True)
-    budget_item = db.relationship('BudgetItem', backref=db.backref('Transaction', lazy='dynamic'))
+    budget_item = db.relationship('BudgetItem', backref=db.backref('Trans', lazy='dynamic'))

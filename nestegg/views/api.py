@@ -1,10 +1,11 @@
 import calendar
+import datetime
 import json
 
-from flask import Blueprint, request
+from flask import Blueprint, request, abort
 from util import *
 from consts import *
-from database import db, Budget, Bucket, BudgetItem
+from database import db, Budget, Bucket, BudgetItem, Trans
 
 api = Blueprint('api', __name__,
                         template_folder='templates')
@@ -47,7 +48,6 @@ def budget_get(year, month):
     budget = Budget.query.filter_by(year=int(year), month=month_name_to_num(month)).first_or_404()
     budget_items = BudgetItem.query.filter_by(budget=budget).all()
 
-    # import IPython; IPython.embed()
     budget_ret = {"year": budget.year, "month": month_num_to_name(budget.month), "items": {}}
     for budget_item in budget_items:
         if budget_item.category not in budget_ret['items']:
@@ -58,5 +58,41 @@ def budget_get(year, month):
             "type": budget_item.type
         }
         budget_ret['items'][budget_item.category][budget_item.sub_category] = i
+
     return json.dumps(budget_ret)
+
+@api.route("/transaction/create", methods=['POST'])
+def transaction_create():
+    transaction_dict = request.get_json()
+
+    t = Trans()
+    t.title = transaction_dict['title']
+    t.amount = float(transaction_dict['amount'])
+
+    year, month, day = map(int, transaction_dict['date'].split("-"))
+    t.date = datetime.date(year, month, day)
+
+    t_cat, t_sub_cat = transaction_dict['budget_item']
+
+    budget_item = BudgetItem.query.filter_by(category=t_cat, sub_category=t_sub_cat).first_or_404()
+    t.budget_item = budget_item
+
+    db.session.add(t)
+    db.session.commit()
+
+    return "Good"
+
+@api.route("/transaction/get/all", methods=['GET'])
+def transaction_get():
+    trans = Trans.query.all()
+    trans_out = []
+    for tran in trans:
+        trans_out.append({
+            "title": tran.title,
+            "amount": tran.amount,
+            "date": str(tran.date),
+            "budget_item": [tran.budget_item.category, tran.budget_item.sub_category]
+        })
+
+    return json.dumps(trans_out)
 
