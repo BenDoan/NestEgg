@@ -12,6 +12,6 @@ def index():
     return INDEX_TPL
 
 
-@main.route('/<path:path>')
+@main.route('/static/<path:path>')
 def static_proxy(path):
-  return main.send_static_file(path)
+  return main.send_static_file("/static/" + path)
