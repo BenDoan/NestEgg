@@ -1,6 +1,8 @@
 import Vue from 'vue'
-import VueResource from 'vue-resource'
 import VueRouter from 'vue-router'
+import axios from 'axios'
+import VueAxios from 'vue-axios'
+
 //import App from './App.vue'
 import Table from './Table.vue'
 import Home from './Home.vue'
@@ -9,8 +11,8 @@ import Transactions from './Transactions.vue'
 
 import global from './global'
 
-Vue.use(VueResource);
 Vue.use(VueRouter);
+Vue.use(VueAxios, axios)
 
 console.log(global);
 console.log(global.data);
