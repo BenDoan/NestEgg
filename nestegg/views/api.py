@@ -33,7 +33,7 @@ def budget_create():
             i.type = attrs['type']
 
             if attrs['type'] == BUDGET_TYPES['bucket']:
-                bucket = Bucket(attrs['bucket'], budget)
+                bucket = Bucket(attrs['bucket'])
                 db.session.add(bucket)
 
                 i.bucket = bucket
@@ -96,3 +96,24 @@ def transaction_get():
 
     return json.dumps(trans_out)
 
+@api.route("/homeinfo/get", methods=['GET'])
+def homeinfo_get():
+    out = {"buckets": {}}
+
+    buckets = Bucket.query.all()
+    for bucket in buckets:
+        out['buckets'][bucket.name] = bucket.amount
+
+    today = datetime.date.today()
+    last_day = calendar.monthrange(today.year, today.month)[1]
+    transactions = Trans.query.filter(Trans.date.between(today.replace(day=1),
+                                                         today.replace(day=last_day))).all()
+
+    budget = Budget.query.filter_by(year=today.year, month=today.month).first_or_404()
+    budget_items = BudgetItem.query.filter_by(budget=budget).all()
+
+    out['total_spent'] = sum(x.amount for x in transactions)
+    out['total_budgeted'] = sum(x.max for x in budget_items)
+
+
+    return json.dumps(out)
