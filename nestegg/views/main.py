@@ -11,3 +11,7 @@ main = Blueprint('main', __name__,
 def index():
     return INDEX_TPL
 
+
+@main.route('/<path:path>')
+def static_proxy(path):
+  return main.send_static_file(path)
