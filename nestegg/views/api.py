@@ -43,6 +43,30 @@ def budget_create():
 
     return "Good"
 
+@api.route("/budget/add", methods=['POST'])
+def budget_item_add():
+    budget_item_dict = request.get_json()
+    year = int(budget_item_dict['year'])
+    month = month_name_to_num(budget_item_dict['month'])
+
+    budget = Budget.query.filter_by(year=year, month=month).first_or_404()
+
+    b = BudgetItem()
+    b.budget = budget
+    b.category = budget_item_dict['category']
+    b.sub_category = budget_item_dict['sub_category']
+    b.max = budget_item_dict['max']
+    b.type = budget_item_dict['type']
+
+    if budget_item_dict['type'] == BUDGET_TYPES['bucket']:
+        bucket = Bucket.query.filter_by(name=budget_item_dict['bucket']).first_or_404()
+        b.bucket = bucket
+
+    db.session.add(b)
+    db.session.commit()
+
+    return "Good"
+
 @api.route("/budget/get/<year>/<month>", methods=['GET'])
 def budget_get(year, month):
     budget = Budget.query.filter_by(year=int(year), month=month_name_to_num(month)).first_or_404()
