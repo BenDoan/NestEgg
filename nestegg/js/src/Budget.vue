@@ -16,8 +16,12 @@
                 </div>
                 - ${{ bucket_amount }} = ${{ budget_income - bucket_amount }}
             </div>
-            <div class="progress">
-                <div class="progress-bar progress-bar-success" v-bind:style="{width: percent(bucket_amount/budget_income)}">
+            </br>
+            <div class="alert alert-success">
+                <p>You have allocated ${{ sum_all() }} of ${{ budget_income - bucket_amount }}</p>
+                <div class="progress">
+                    <div class="progress-bar progress-bar-success" v-bind:style="{width: percent(sum_all()/budget_income)}">
+                    </div>
                 </div>
             </div>
             <template v-for="(cat, i) in budget">
@@ -42,7 +46,7 @@
                 </h2>
                 <div class="gridbox" v-for="(item, j) in cat.items">
                     <template v-if="!item.edit">
-                        <span>{{ item.name }}: ${{ item.amount }}</span>
+                        <span>{{ item.name }}: ${{ item.amount }} (${{item.used}})</span>
                         <button class="unbutton" v-on:click="item.edit=true"><small><span class="glyphicon glyphicon-edit edit-button"></span></small></button>
                     </template>
                     <template v-if="item.edit">
@@ -64,7 +68,7 @@
                 </div>
                 <div class="gridbox">
                     <span class="unvisible">-</span>
-                    <button class="unbutton" v-on:click="cat.items.push({name:'',edit:true,amount:100})"><span class="glyphicon glyphicon-plus"></span></button>
+                    <button class="unbutton" v-on:click="cat.items.push({name:'',edit:true,amount:100,used:0})"><span class="glyphicon glyphicon-plus"></span></button>
                 </div>
             </template>
             <h2>
@@ -144,6 +148,15 @@
             }
         },
         methods: {
+            sum_all (){
+                var acc = 0;
+                this.budget.forEach((cat) => {
+                    cat.items.forEach((item) => {
+                        acc += parseInt(item.amount);
+                    });
+                });
+                return acc;
+            },
             percent (v) {
                 return (v*100)+"%";
             },
@@ -221,16 +234,37 @@
                 return out;
             },
             update_budget () {
-                this.axios.get("/api/budget/get/"+this.budget_year+"/"+this.budget_month).then((response) => {
-                    this.budget = this.server_to_client(response.data.items);
-                    this.budget_income = response.data.income;
-                    this.budget_exists = true;
-                    this.axios.get("/api/transaction/get/all").then((response) => {
-                        console.log(response.data);
+                this.axios.get("/api/transaction/get/all").then((response) => {
+                    var transactions = response.data;
+                    this.axios.get("/api/budget/get/"+this.budget_year+"/"+this.budget_month).then((response) => {
+                        this.budget = this.server_to_client(response.data.items);
+                        this.budget_income = response.data.income;
+                        this.budget_exists = true;
+                        
+                        transactions.forEach((transaction) => {
+                            var dt = transaction.date.split("-");
+                            var cnam = transaction.budget_item[0];
+                            var scnam = transaction.budget_item[1];
+                            console.log(dt);
+                            if(this.budget_month+1 == dt[1] && this.budget_year == dt[0]) {
+                                this.budget.forEach((cat) => {
+                                    console.log(cat);
+                                    if(cat.name == cnam){
+                                        cat.used += transaction.amount;
+                                        cat.items.forEach((item) => {
+                                            console.log(item);
+                                            if(item.name== scnam) {
+                                                item.used += transaction.amount;
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                        });
+                    }, (error) => {
+                        this.budget_exists = false;
+                        console.log(error);
                     });
-                }, (error) => {
-                    this.budget_exists = false;
-                    console.log(error);
                 });
             },
             setedit (cat, subcat) {
