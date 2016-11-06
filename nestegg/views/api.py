@@ -78,12 +78,25 @@ def budget_get(year, month):
             budget_ret['items'][budget_item.category] = {}
 
         i = {
+            "id": budget_item.id,
             "max": budget_item.max,
             "type": budget_item.type
         }
         budget_ret['items'][budget_item.category][budget_item.sub_category] = i
 
     return json.dumps(budget_ret)
+
+@api.route("/budget/get/<year>/<month>/category/sub_category", methods=['GET'])
+def budget_item_del(year, month, category, sub_category):
+    budget = Budget.query.filter_by(year=int(year), month=int(month)).first_or_404()
+    budget_item = BudgetItem.query.filter_by(budget=budget,
+                                              category=category,
+                                              sub_category=sub_category).first_or_404()
+    db.session.delete(budget_item)
+    db.session.commit()
+
+    return "Good"
+
 
 @api.route("/budgetmonths/get/all", methods=['GET'])
 def budget_months_get():
@@ -126,12 +139,22 @@ def transaction_create():
 
     return "Good"
 
+@api.route("/transaction/delete/<id>", methods=['GET'])
+def transaction_delete(id):
+    trans = Trans.query.filter_by(id=id).first_or_404()
+
+    db.session.delete(trans)
+    db.session.commit()
+
+    return "Good"
+
 @api.route("/transaction/get/all", methods=['GET'])
 def transaction_get():
     trans = Trans.query.all()
     trans_out = []
     for tran in trans:
         trans_out.append({
+            "id": tran.id,
             "title": tran.title,
             "amount": tran.amount,
             "date": str(tran.date),
@@ -175,3 +198,12 @@ def buckets_get():
     buckets = Bucket.query.all()
     out = [(x.name, x.amount) for x in buckets]
     return json.dumps(out)
+
+@api.route("/bucket/del/<name>", methods=['GET'])
+def buckets_delete(name):
+    bucket = Bucket.query.filter_by(name=name).first_or_404()
+    db.session.delete(bucket)
+    db.session.commit()
+
+    return "Good"
+
