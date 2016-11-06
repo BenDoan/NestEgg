@@ -7,6 +7,7 @@ import VueAxios from 'vue-axios'
 import Table from './Table.vue'
 import Home from './Home.vue'
 import Budget from './Budget.vue'
+import Bucket from './Bucket.vue'
 import Transactions from './Transactions.vue'
 
 import global from './global'
@@ -20,6 +21,7 @@ const router = new VueRouter({
     routes: [
         { path:"/", component: Home },
         { path:"/budget", component: Budget },
+        { path:"/bucket", component: Bucket },
         { path:"/transactions", component: Transactions }
     ]
 });
