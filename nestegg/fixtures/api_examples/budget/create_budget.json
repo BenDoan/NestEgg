@@ -1,6 +1,7 @@
 {
     "year": 2016,
     "month": 11,
+    "income": 1000,
     "items": {
         "utilities": {
             "gas": {"max": 30},
