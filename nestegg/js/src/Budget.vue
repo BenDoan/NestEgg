@@ -367,8 +367,10 @@ h1 .glyphicon, h2 .glyphicon {
     margin: 10px;
 
 	border: 1px solid #ccc;
-	padding:15px;
+	padding:10px;
 	border-radius:10px;
+
+    font-size: 14pt;
 }
 
 .gridbox button {

@@ -38,7 +38,7 @@
             <tbody>
                 <tr v-for="(transaction, i) in transactions">
                     <td>{{ transaction['title'] }}</td>
-                    <td>{{ transaction['amount'] }}</td>
+                    <td>${{ transaction['amount'] }}</td>
                     <td>{{ transaction['date'] }}</td>
                     <td>{{ transaction['budget_item'].join('/') }}</td>
                 </tr>
