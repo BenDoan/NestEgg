@@ -78,6 +78,7 @@ def budget_get(year, month):
             budget_ret['items'][budget_item.category] = {}
 
         i = {
+            "id": budget_item.id,
             "max": budget_item.max,
             "type": budget_item.type
         }
@@ -132,6 +133,7 @@ def transaction_get():
     trans_out = []
     for tran in trans:
         trans_out.append({
+            "id": tran.id,
             "title": tran.title,
             "amount": tran.amount,
             "date": str(tran.date),
