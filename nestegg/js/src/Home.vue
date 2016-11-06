@@ -50,15 +50,16 @@
 	</table>
 	<h2 class="head">Budget</h2>
 	<div class="budget">
-		{{ data["total_spent"] }}	{{ data["total_budgeted"] }}
 	</div>
 	<h2>Buckets</h2>
 	<div class="row">
-		<div v-for="(bucket,i) in data['buckets']" class="col-sm-3 bucket-pod">
-			<h2>{{ bucket[name] }}</h2>
-			<p>Amount Total: ${{ bucket[amount] }}</p>
+		<div v-for="(amount,name,index) in data.buckets" class="col-sm-3 bucket-pod">
+			<h2>{{ name}}</h2>
+			<p>Amount Total: ${{amount }}</p>
 		</div>
 	</div>
+
+
 </div>
 </template>
 
