@@ -14,11 +14,13 @@
                 <th></th>
                 <th>Bucket</th>
                 <th>Amount</th>
+                <th>Monthly amount</th>
             </tr>
             <tr v-for="(bucket, i) in buckets">
                 <td></td>
-                <td>{{ bucket[0] }}</td>
-                <td>{{ bucket[1] }}</td>
+                <td>{{ bucket['name'] }}</td>
+                <td>{{ bucket['amount'] }}</td>
+                <td>{{ bucket['monthly_amount'] }}</td>
             </tr>
         </table>
 
@@ -45,10 +47,11 @@ export default {
     methods: {
         addNewBucket: function (event){
             let newBucket = this.newBucket
-            this.buckets.push([newBucket, 0])
+            let bucketDict = {"name": newBucket, "amount": 0, "monthly_amount": 0}
+            this.buckets.push(bucketDict)
             this.newBucket = ""
 
-            this.axios.post("/api/bucket/add/"+newBucket).then((response) => {
+            this.axios.post("/api/bucket/add", bucketDict).then((response) => {
             })
         }
     }

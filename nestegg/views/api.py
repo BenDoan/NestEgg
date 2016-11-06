@@ -169,9 +169,11 @@ def homeinfo_get():
 
     return json.dumps(out)
 
-@api.route("/bucket/add/<name>", methods=['POST', 'GET'])
-def buckets_add(name):
-    bucket = Bucket(name)
+@api.route("/bucket/add", methods=['POST', 'GET'])
+def buckets_add():
+    bucket_dict = request.get_json()
+
+    bucket = Bucket(bucket_dict['name'], bucket_dict['monthly_amount'])
     db.session.add(bucket)
     db.session.commit()
 
@@ -180,7 +182,15 @@ def buckets_add(name):
 @api.route("/bucket/get/all", methods=['GET'])
 def buckets_get():
     buckets = Bucket.query.all()
-    out = [(x.name, x.amount) for x in buckets]
+
+    out = []
+    for bucket in buckets:
+        out.append({
+            "name": bucket.name,
+            "monthly_amount": bucket.monthly_amount,
+            "amount": bucket.amount
+        })
+
     return json.dumps(out)
 
 @api.route("/bucket/del/<name>", methods=['GET'])

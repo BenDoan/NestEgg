@@ -14,9 +14,11 @@ class Bucket(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80), unique=True, nullable=False)
     amount = db.Column(db.Integer, nullable=False)
+    monthly_amount = db.Column(db.Integer, nullable=False)
 
-    def __init__(self, name):
+    def __init__(self, name, monthly_amount):
         self.name = name
+        self.monthly_amount = monthly_amount
         self.amount = 0
 
 class BudgetItem(db.Model):
