@@ -6,6 +6,16 @@
             <button class="unbutton" v-on:click="jumpmonths(1)"><span class="glyphicon glyphicon-chevron-right"></span></button>
         </h1>
         <template v-if="budget_exists">
+            <div class="form-inline">
+                Income: 
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-addon">$</div>
+                        <input v-model="budget_income" type="number" min="0.01" step="0.01" max="2500" placeholder="Expected Income" class="form-control">
+                    </div>
+                </div>
+                - ${{ 0 }} = ${{ budget_income }}
+            </div>
             <template v-for="(cat, i) in budget">
                 <h2>
                     <template v-if="!cat.edit">
@@ -83,7 +93,8 @@
                 budget_year: 0,
                 budget_month: 0,
                 budget_list: [],
-                budget_exists: true
+                budget_exists: true,
+                budget_income: 0
             };
         },
         created () {
@@ -95,6 +106,7 @@
                     this.axios.post("/api/budget/create",{
                         year: now.getFullYear(),
                         month: now.getMonth(),
+                        income: 0,
                         items: {}
                     }).then((response) => {
                         console.log(response);
@@ -112,7 +124,10 @@
         },
         watch: {
             budget_year: "update_budget",
-            budget_month: "update_budget"
+            budget_month: "update_budget",
+            budget_income () {
+                this.axios.post("/api/budget/setincome/"+this.budget_year+"/"+this.budget_month, {"income" : this.budget_income});
+            }
         },
         methods: {
             create_budget () {
@@ -152,6 +167,7 @@
                         });
                     });
                 });
+                console.log(this.budget_income);
             },
             server_to_client(obj) {
                 var out = [];
@@ -188,6 +204,7 @@
             update_budget () {
                 this.axios.get("/api/budget/get/"+this.budget_year+"/"+this.budget_month).then((response) => {
                     this.budget = this.server_to_client(response.data.items);
+                    this.budget_income = response.data.income;
                     this.budget_exists = true;
                 }, (error) => {
                     this.budget_exists = false;
