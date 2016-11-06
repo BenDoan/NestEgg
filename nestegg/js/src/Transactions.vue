@@ -8,17 +8,19 @@
             </div>
 
             <div class="form-group">
-                <input v-model="newTran.amount" type="text" placeholder="Amount" class="form-control">
+                <div class="input-group">
+                    <div class="input-group-addon">$</div>
+                    <input v-model="newTran.amount" type="number" min="0.01" step="0.01" max="2500" placeholder="Amount" class="form-control">
+                </div>
             </div>
 
             <div class="form-group">
-                <input v-model="newTran.date" type="text" placeholder="Date" class="form-control">
+                <input v-model="newTran.date" type="date" placeholder="Date" class="form-control">
             </div>
 
             <div class="form-group">
                 <select v-model="newTran.category" class="form-control">
-                    <option>utilities/gas</option>
-                    <option>utilities/water</option>
+                    <option v-for="(subcat, i) in budget_subcategories">{{ subcat[0] }}/{{ subcat[1] }}</option>
                 </select>
             </div>
             <button v-on:click="addNewTransaction()" class="btn">Add</button>
@@ -53,17 +55,20 @@ export default {
        return {
         global: global,
         transactions: {},
-        newTran: {}
+        newTran: {},
+        budget_subcategories: []
        }
     },
     created: function(){
         this.axios.get("/api/transaction/get/all").then((response) => {
             this.transactions = response.data
         })
+        this.axios.get("/api/subcategory/all/get").then((response) => {
+            this.budget_subcategories = response.data
+        })
     },
     methods: {
         addNewTransaction: function (event){
-            console.log(this.newTran)
             let newTran = this.newTran
             newTran['budget_item'] = newTran['category'].split("/")
 

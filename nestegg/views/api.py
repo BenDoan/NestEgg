@@ -101,6 +101,13 @@ def subcategory_get(year, month):
     out = [(x.category, x.sub_category) for x in budget_items]
     return json.dumps(out)
 
+@api.route("/subcategory/all/get", methods=['GET'])
+def subcategory_get_all():
+    budget_items = BudgetItem.query.all()
+
+    out = [(x.category, x.sub_category) for x in budget_items]
+    return json.dumps(out)
+
 
 @api.route("/transaction/create", methods=['POST'])
 def transaction_create():
