@@ -120,7 +120,7 @@
 </div>
 </template>
 
-<style lang="stylus">
+<style lang="stylus" scoped>
 
 /*
 .bar_holder
@@ -149,9 +149,6 @@ background-color:greent;
 
 .bucket-pod:hover
 	background-color:#DDD;
-
-header
-	background: url("../../static/img/bg-pattern.png"), linear-gradient(to left, #4c9760, #60b370)!important;
 
 </style>
 
