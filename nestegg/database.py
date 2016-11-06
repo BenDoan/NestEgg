@@ -14,9 +14,11 @@ class Bucket(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80), unique=True, nullable=False)
     amount = db.Column(db.Integer, nullable=False)
+    monthly_amount = db.Column(db.Integer, nullable=False)
 
-    def __init__(self, name):
+    def __init__(self, name, monthly_amount):
         self.name = name
+        self.monthly_amount = monthly_amount
         self.amount = 0
 
 class BudgetItem(db.Model):
@@ -26,14 +28,10 @@ class BudgetItem(db.Model):
 
     sub_category = db.Column(db.String(80), nullable=False)
     category = db.Column(db.String(80), nullable=False)
-    type = db.Column(db.String(80), nullable=False)
     max = db.Column(db.Integer, nullable=False)
 
     budget_id = db.Column(db.Integer, db.ForeignKey('budget.id'), nullable=False)
     budget = db.relationship('Budget', backref=db.backref('BudgetItem', lazy='dynamic'))
-
-    bucket_id = db.Column(db.Integer, db.ForeignKey('bucket.id'), nullable=True)
-    bucket = db.relationship('Bucket', backref=db.backref('BudgetItem', lazy='dynamic'))
 
 class Trans(db.Model):
     __table_args__ = (UniqueConstraint('title', 'amount', 'date', 'budget_item_id'),)

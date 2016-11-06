@@ -147,13 +147,19 @@ footer > p{
 }
 */
 
-p{
+p {
 	font-size:15px!important;
 	margin-bottom:5px!important;
 
 }
 
+<<<<<<< HEAD
 h1,h2,h3,h4,th{
+=======
+
+h1,h2,h3,h4,p,table {
+	font-family: "Avenir Next Pro" !important;
+>>>>>>> 1e61cc45153b455fc9072505eb3dd099c8712cc1
 	color:green!important;
 }
 p,table{
@@ -171,4 +177,9 @@ h2{
 
 div#app {
     height:100%;
+}
+
+header {
+  background: url("/static/img/bg-pattern.png"), linear-gradient(to left, #006633, #00AD57)!important;
+  background: url("/static/img/bg-pattern.png"), -webkit-linear-gradient(to left, #006633, #00AD57)!important;
 }

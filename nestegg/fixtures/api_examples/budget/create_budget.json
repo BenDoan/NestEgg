@@ -3,17 +3,17 @@
     "month": 10,
     "items": {
         "utilities": {
-            "gas": {"max": 30, "type": "monthly"},
-            "electricity": {"max": 100, "type": "monthly"},
-            "rent": {"max": 700, "type": "monthly"}
+            "gas": {"max": 30},
+            "electricity": {"max": 100},
+            "rent": {"max": 700}
        },
        "food": {
-            "groceries": {"max": 150, "type": "monthly"},
-            "restaurants": {"max": 75, "type": "monthly"}
+            "groceries": {"max": 150},
+            "restaurants": {"max": 75}
         },
         "car": {
-            "gas": {"max": 50, "type": "monthly"},
-            "maintenance": {"max": 75, "type": "bucket", "bucket": "Car Maintenance"}
+            "gas": {"max": 50},
+            "maintenance": {"max": 75}
         }
     }
 }
