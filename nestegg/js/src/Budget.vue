@@ -69,7 +69,7 @@
                 },*/
                 budget_year: 0,
                 budget_month: 0,
-                budget_list: []
+                budget_list: [],
             };
         },
         created () {
@@ -100,7 +100,18 @@
                 console.log(error);
             });
         },
+        watch: {
+            budget_year: "update_budget",
+            budget_month: "update_budget"
+        },
         methods: {
+            update_budget () {
+                this.axios.get("/api/budget/get/"+this.budget_year+"/"+this.budget_month).then((response) => {
+                    this.structure = response.data.items;
+                }, (error) => {
+                    console.log(error);
+                });
+            },
             setedit (cat, subcat) {
                 if(this.edit_data.cat) {
                     if(this.edit_data.prev_key){
