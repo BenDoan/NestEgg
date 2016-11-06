@@ -46,7 +46,7 @@
                 </h2>
                 <div class="gridbox" v-for="(item, j) in cat.items">
                     <template v-if="!item.edit">
-                        <span>{{ item.name }}: ${{ item.amount }} (${{item.used}})</span>
+                        <span>{{ item.name }}: ${{ item.amount }} (spent: ${{item.used}})</span>
                         <button class="unbutton" v-on:click="item.edit=true"><small><span class="glyphicon glyphicon-edit edit-button"></span></small></button>
                     </template>
                     <template v-if="item.edit">

@@ -178,7 +178,7 @@ def homeinfo_get():
     transactions = Trans.query.filter(Trans.date.between(today.replace(day=1),
                                                          today.replace(day=last_day))).all()
 
-    budget = Budget.query.filter_by(year=today.year, month=today.month).first_or_404()
+    budget = Budget.query.filter_by(year=today.year, month=today.month-1).first_or_404()
     budget_items = BudgetItem.query.filter_by(budget=budget).all()
 
     out['total_spent'] = sum(x.amount for x in transactions)
