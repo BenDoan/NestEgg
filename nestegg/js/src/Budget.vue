@@ -16,6 +16,7 @@
                 </div>
                 - ${{ bucket_amount }} = ${{ budget_income - bucket_amount }}
             </div>
+            <br>
             <div class="progress">
                 <div class="progress-bar progress-bar-success" v-bind:style="{width: percent(bucket_amount/budget_income)}">
                 </div>
