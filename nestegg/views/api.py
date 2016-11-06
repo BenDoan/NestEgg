@@ -85,6 +85,13 @@ def budget_get(year, month):
 
     return json.dumps(budget_ret)
 
+@api.route("/budgetmonths/get/all", methods=['GET'])
+def budget_months_get():
+    budgets = Budget.query.all()
+    out =[(x.year, x.month) for x in budgets]
+
+    return json.dumps(out)
+
 @api.route("/subcategory/get/<year>/<month>", methods=['GET'])
 def subcategory_get(year, month):
     budget = Budget.query.filter_by(year=int(year), month=month_name_to_num(month)).first_or_404()
