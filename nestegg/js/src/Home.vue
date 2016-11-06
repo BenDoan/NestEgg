@@ -50,15 +50,26 @@
 	</table>
 	<h2 class="head">Budget</h2>
 	<div class="budget">
-		{{ data["total_spent"] }}	{{ data["total_budgeted"] }}
+		<div class="progress">
+			<div class="progress-bar progress-bar-success" v-bind:style="{width: percent(data.total_spent/data.total_budgeted)}">
+			</div>
+		</div>
+			{{Math.round((data.total_spent/data.total_budgeted * 100) * 100)/100}}%
+			<br />
+			${{data.total_spent}} / ${{data.total_budgeted}}
 	</div>
 	<h2>Buckets</h2>
 	<div class="row">
-		<div v-for="(bucket,i) in data['buckets']" class="col-sm-3 bucket-pod">
-			<h2>{{ bucket[name] }}</h2>
-			<p>Amount Total: ${{ bucket[amount] }}</p>
+		<router-link to = "/bucket">
+		<div v-for="(amount,name,index) in data.buckets" class="col-sm-3 bucket-pod">
+			<h2>{{ name}}</h2>
+			<p>Amount Total: ${{amount }}</p>
 		</div>
+		</router-link>
 	</div>
+
+
+
 </div>
 </template>
 
@@ -95,16 +106,20 @@
 <script>
 export default {
 name: "home",
-    data () {
-       return {
-        global: global,
-        data: {}
-       }
-    },
-    created: function(){
-        this.axios.get("/api/homeinfo/get").then((response) => {
-            this.data= response.data
-        })
-    }
+				data () {
+					return { global: global,
+						data: {}
+					}
+				},
+created: function(){
+					 this.axios.get("/api/homeinfo/get").then((response) => {
+							 this.data= response.data
+							 })
+				 },
+methods: {
+					 percent(v){
+						 return (v*100)+"%";
+					 }
+				 }
 }
 </script>

@@ -13,19 +13,21 @@
             <button v-on:click="addNewBucket()" class="btn">Add</button>
         </div>
         <br>
-        <table class="table table-hover">
-            <tr>
-                <th></th>
-                <th>Bucket</th>
-                <th>Amount</th>
-                <th>Monthly amount</th>
-            </tr>
-            <tr v-for="(bucket, i) in buckets">
-                <td></td>
-                <td>{{ bucket['name'] }}</td>
-                <td>${{ bucket['amount'] }}</td>
-                <td>${{ bucket['monthly_amount'] }}</td>
-            </tr>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Bucket</th>
+                    <th>Amount</th>
+                    <th>Monthly amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="(bucket, i) in buckets">
+                    <td>{{ bucket['name'] }}</td>
+                    <td>${{ bucket['amount'] }}</td>
+                    <td>${{ bucket['monthly_amount'] }}</td>
+                </tr>
+            </tbody>
         </table>
 
     </div>

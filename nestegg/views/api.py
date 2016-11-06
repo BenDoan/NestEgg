@@ -116,6 +116,7 @@ def subcategory_get_all():
     budget_items = BudgetItem.query.all()
 
     out = [(x.category, x.sub_category) for x in budget_items]
+    out = sorted(list(set(out)))
     return json.dumps(out)
 
 

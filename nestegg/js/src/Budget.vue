@@ -33,7 +33,7 @@
                     <template v-if="cat.edit">
                         <div class="form-inline">
                             <div class="form-group">
-                                <input type="text" v-model="cat.name" class="form-control" @keyup.enter="cat.edit=false"></input>
+                                <input type="text" v-model="cat.name" class="form-control" @keyup.enter="cat.edit=false; save_budget()"></input>
                             </div>
                             <div class="form-group">
                                 <button class="unbutton" v-on:click="cat.edit=false"><span class="glyphicon glyphicon-ok edit-button"></span></button>
@@ -52,10 +52,10 @@
                     <template v-if="item.edit">
                         <div class="form-inline">
                             <div class="form-group">
-                                <input type="text" v-model="item.name" class="form-control" @keyup.enter="item.edit=false"></input>
+                                <input type="text" v-model="item.name" class="form-control" @keyup.enter="item.edit=false; save_budget()"></input>
                             </div>
                             <div class="form-group">
-                                <input type="numeric" v-model="item.amount" class="form-control" @keyup.enter="item.edit=false"></input>
+                                <input type="numeric" v-model="item.amount" class="form-control" @keyup.enter="item.edit=false; save_budget()"></input>
                             </div>
                             <div class="form-group">
                                 <button class="unbutton" v-on:click="item.edit=false"><span class="glyphicon glyphicon-ok"></span></button>
