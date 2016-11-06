@@ -1,9 +1,9 @@
 {
     "year": 2016,
-    "month": "Nov",
+    "month": 10,
     "category": "utility",
     "sub_category": "gas",
     "max": 200,
     "type": "bucket",
-    "bucket": "Car Maintenance"
+    "bucket": "socks"
 }
