@@ -21,6 +21,7 @@ def budget_create():
     budget = Budget()
     budget.year = int(budget_dict['year'])
     budget.month = int(budget_dict['month'])
+    budget.income = int(budget_dict['income'])
     db.session.add(budget)
 
     for cat_name, sub_cat in budget_dict['items'].items():
@@ -60,7 +61,7 @@ def budget_get(year, month):
     budget = Budget.query.filter_by(year=int(year), month=int(month)).first_or_404()
     budget_items = BudgetItem.query.filter_by(budget=budget).all()
 
-    budget_ret = {"year": budget.year, "month": budget.month, "items": {}}
+    budget_ret = {"year": budget.year, "month": budget.month, "income": budget.income, "items": {}}
     for budget_item in budget_items:
         if budget_item.category not in budget_ret['items']:
             budget_ret['items'][budget_item.category] = {}
@@ -72,6 +73,15 @@ def budget_get(year, month):
         budget_ret['items'][budget_item.category][budget_item.sub_category] = i
 
     return json.dumps(budget_ret)
+
+@api.route("/budget/setincome/<year>/<month>", methods=['POST'])
+def budget_set_income(year, month):
+    budget = Budget.query.filter_by(year=int(year), month=int(month)).first_or_404()
+    budget.income = int(request.get_json()["income"])
+    db.session.add(budget)
+    db.session.commit()
+
+    return "Good"
 
 @api.route("/budget/get/<year>/<month>/<category>/<sub_category>", methods=['GET'])
 def budget_item_del(year, month, category, sub_category):

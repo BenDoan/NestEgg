@@ -4,7 +4,7 @@
         <h3>Add entry</h3>
         <div class="form-inline">
             <div class="form-group">
-                <input v-model="newBucket" type="text" placeholder="Title" class="form-control" >
+                <input @keyup.enter="addNewBucket()" v-model="newBucket" type="text" placeholder="Title" class="form-control" >
             </div>
             <button v-on:click="addNewBucket()" class="btn">Add</button>
         </div>

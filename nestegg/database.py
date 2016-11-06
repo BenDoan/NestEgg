@@ -9,6 +9,7 @@ class Budget(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     year = db.Column(db.Integer, nullable=False)
     month = db.Column(db.Integer, nullable=False)
+    income = db.Column(db.Float);
 
 class Bucket(db.Model):
     id = db.Column(db.Integer, primary_key=True)

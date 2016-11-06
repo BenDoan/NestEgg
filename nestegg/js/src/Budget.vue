@@ -1,37 +1,58 @@
 <template>
     <div id="app">
-        <h1>Budget for {{budget_year}}-{{budget_month+1}}</h1>
-        <button class="btn btn-primary" v-on:click="addcat()"><span class="glyphicon gliphicon-add" aria-hidden="true"></span>Add category</button>
-        <div v-for="nam in Object.keys(structure).sort()">
-            <template v-if="edit == nam">
-                <div class="input-group">
-                <span class="input-group-btn"><button class="btn btn-secondary" v-on:click="un_shunt(nam)"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span></button></span><input type="text" class="form-control" v-model="shunt.name"></input>
-                </div>
-                    <div class="form-inline" v-for="(row, i) in shunt.rows">
-                            <div class="input-group">
-                                <span class="input-group-btn"><button class="btn btn-secondary" v-on:click="remove(i)"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button></span>
-                                <input type="text" class="form-control" v-model="row.key"></input>
-                            </div>
-                            <input type="text" class="form-control" v-model="row.type"></input>
-                            <input type="numeric" class="form-control" v-model="row.max"></input>
+        <h1>
+            <button class="unbutton" v-on:click="jumpmonths(-1)"><span class="glyphicon glyphicon-chevron-left"></span></button>
+            Budget for {{budget_year}}-{{budget_month+1}}
+            <button class="unbutton" v-on:click="jumpmonths(1)"><span class="glyphicon glyphicon-chevron-right"></span></button>
+        </h1>
+        <template v-if="budget_exists">
+            <div class="form-inline">
+                Income: 
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-addon">$</div>
+                        <input v-model="budget_income" type="number" min="0.01" step="0.01" max="2500" placeholder="Expected Income" class="form-control">
                     </div>
-                    <button class="btn btn-secondary" v-on:click="add()"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
+                </div>
+                - ${{ 0 }} = ${{ budget_income }}
+            </div>
+            <template v-for="(cat, i) in budget">
+                <h2>
+                    <template v-if="!cat.edit">
+                        {{ cat.name }}
+                        <button class="unbutton" v-on:click="cat.edit=true"><small><span class="glyphicon glyphicon-edit edit-button"></span></small></button>
+                    </template>
+                    <template v-if="cat.edit">
+                        <input type="text" v-model="cat.name"></input>
+                        <button class="unbutton" v-on:click="cat.edit=false"><span class="glyphicon glyphicon-ok"></span></button>
+                        <button class="unbutton" v-on:click="budget.splice(i, 1)"><span class="glyphicon glyphicon-remove"></span></button>
+                    </template>
+                </h2>
+                <div class="gridbox" v-for="(item, j) in cat.items">
+                    <template v-if="!item.edit">
+                        <span>{{ item.name }}: ${{ item.amount }}</span>
+                        <button class="unbutton" v-on:click="item.edit=true"><small><span class="glyphicon glyphicon-edit edit-button"></span></small></button>
+                    </template>
+                    <template v-if="item.edit">
+                        <input type="text" v-model="item.name"></input>
+                        <input type="numeric" v-model="item.amount"></input>
+                        <button class="unbutton" v-on:click="item.edit=false"><span class="glyphicon glyphicon-ok"></span></button>
+                        <button class="unbutton" v-on:click="cat.items.splice(j, 1)"><span class="glyphicon glyphicon-remove"></span></button>
+                    </template>
+                </div>
+                <div class="gridbox">
+                    <button class="unbutton" v-on:click="cat.items.push({name:'',edit:true,amount:100})"><span class="glyphicon glyphicon-plus"></span></button>
+                </div>
             </template>
-            <template v-if="edit != nam">
-                <h2><button v-on:click="do_shunt(nam)" class="btn btn-primary"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></button> {{nam}}</h2>
-                <table class="table table-hover">
-                    <tbody>
-                        <template v-for="subnam in Object.keys(structure[nam]).sort()">
-                            <tr>
-                                <td>{{ subnam }}</td>
-                                <td>{{ structure[nam][subnam].type }}</td>
-                                <td>${{structure[nam][subnam].max}}</td>
-                            </tr>
-                        </template>
-                    </tbody>
-                </table>
-            </template>
-        </div>
+            <h2>
+                <button class="unbutton" v-on:click="budget.push({name:'',edit:true,items:[]})"><span class="glyphicon glyphicon-plus"></span></button>
+            </h2>
+            <button v-on:click="save_budget()" class="btn btn-primary">Save</button>
+        </template>
+        <template v-if="!budget_exists">
+            <p>budget does not exist</p>
+            <button v-on:click="create_budget()" class="btn btn-primary">Create a budget</button>
+        </template>
     </div>
 </template>
 <script>
@@ -51,6 +72,7 @@
                     max: 0
                 },
                 edit: null,
+                budget: [],
                 structure: {},
 /*                    utilities: {
                         gas: {
@@ -70,20 +92,23 @@
                 budget_year: 0,
                 budget_month: 0,
                 budget_list: [],
+                budget_exists: true,
+                budget_income: 0
             };
         },
         created () {
+            var now = new Date();
+            this.budget_year = now.getFullYear();
+            this.budget_month = now.getMonth();
             this.axios.get("/api/budgetmonths/get/all").then((response) => {
                 if(response.data.length == 0){
-                    var now = new Date();
                     this.axios.post("/api/budget/create",{
                         year: now.getFullYear(),
                         month: now.getMonth(),
+                        income: 0,
                         items: {}
                     }).then((response) => {
                         console.log(response);
-                        this.budget_year = now.getFullYear();
-                        this.budget_month = now.getMonth();
                         this.structure = {};
                     });
                 } else {
@@ -91,10 +116,6 @@
                         return a[0]*100+a[1] - (b[0]*100+b[1]);
                     });
                     this.budget_list = response.data;
-                    var latest=response.data[response.data.length-1];
-                    this.budget_year=latest[0];
-                    this.budget_month=latest[1];
-                    console.log(response.data);
                 }
             }, (error) => {
                 console.log(error);
@@ -102,13 +123,90 @@
         },
         watch: {
             budget_year: "update_budget",
-            budget_month: "update_budget"
+            budget_month: "update_budget",
+            budget_income () {
+                this.axios.post("/api/budget/setincome/"+this.budget_year+"/"+this.budget_month, {"income" : this.budget_income});
+            }
         },
         methods: {
+            create_budget () {
+                var b = this.budget_list[this.budget_list.length-1];
+                this.axios.get("/api/budget/get/"+b[0]+"/"+b[1]).then((response) => {
+                    response.data.year = this.budget_year;
+                    response.data.month = this.budget_month;
+                    this.axios.post("/api/budget/create",response.data).then((response) => {
+                        this.update_budget();
+                    });
+                });
+            },
+            save_budget () {
+                this.axios.get("/api/budget/get/"+this.budget_year+"/"+this.budget_month).then((response) => {
+                    var old = response.data.items;
+                    var targ = this.client_to_server(this.budget);
+                    Object.keys(old).forEach((cat) => {
+                        Object.keys(old[cat]).forEach((subcat) => {
+                            if(!(cat in targ) || !(subcat in targ[cat]) ||
+                                    targ[cat][subcat].max != old[cat][subcat].max) {
+                                this.axios.get("/api/budget/get/"+this.budget_year+"/"+this.budget_month+"/"+cat+"/"+subcat);
+                            }
+                        });
+                    });
+                    Object.keys(targ).forEach((cat) => {
+                        Object.keys(targ[cat]).forEach((subcat) => {
+                            if(!(cat in old) || !(subcat in old[cat]) ||
+                                    targ[cat][subcat].max != old[cat][subcat].max) {
+                                this.axios.post("/api/budget/add", {
+                                    year: this.budget_year,
+                                    month: this.budget_month,
+                                    category: cat,
+                                    sub_category: subcat,
+                                    max: targ[cat][subcat].max
+                                });
+                            }
+                        });
+                    });
+                });
+                console.log(this.budget_income);
+            },
+            server_to_client(obj) {
+                var out = [];
+                Object.keys(obj).sort().forEach((key) => {
+                    var lst = [];
+                    Object.keys(obj[key]).sort().forEach((subkey) => {
+                        lst.push({
+                            name: subkey,
+                            amount: obj[key][subkey].max,
+                            edit: false
+                        });
+                    });
+                    out.push({
+                        name: key,
+                        edit: false,
+                        items: lst
+                    });
+                });
+                return out;
+            },
+            client_to_server(lst) {
+                var out = {};
+                lst.forEach((cat) => {
+                    var obj = {};
+                    cat.items.forEach((item) => {
+                        obj[item.name] = {
+                            max: item.amount
+                        };
+                    });
+                    out[cat.name] = obj;
+                });
+                return out;
+            },
             update_budget () {
                 this.axios.get("/api/budget/get/"+this.budget_year+"/"+this.budget_month).then((response) => {
-                    this.structure = response.data.items;
+                    this.budget = this.server_to_client(response.data.items);
+                    this.budget_income = response.data.income;
+                    this.budget_exists = true;
                 }, (error) => {
+                    this.budget_exists = false;
                     console.log(error);
                 });
             },
@@ -185,7 +283,50 @@
                 this.structure[1] = {};
                 this.do_shunt(1);
                 this.shunt.name = "new category";
+            },
+            jumpmonths (n) {
+                this.budget_month += n;
+                while(this.budget_month >= 12) {
+                    this.budget_year += 1;
+                    this.budget_month -= 12;
+                }
+                while(this.budget_month < 0) {
+                    this.budget_year -= 1;
+                    this.budget_month += 12;
+                }
             }
         }
     }
 </script>
+
+<style>
+h1 .glyphicon, h2 .glyphicon {
+    color:gray;
+}
+.gridbox {
+    color: #000;
+    display: inline-block;
+    margin: 10px;
+
+	border: 1px solid #ccc;
+	padding:15px;
+	border-radius:10px;
+}
+
+.gridbox button {
+    float:left;
+}
+
+.edit-button {
+    font-size:13px;
+}
+
+.unbutton {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    outline: none;
+    border: 0;
+    background: transparent;
+}
+</style>
