@@ -167,11 +167,11 @@ h2{
     src: url("/static/css/font/AvenirNextLTPro-Regular.otf"); /* File to be stored at your site */
 }
 
-div#app {
+html, body, div#app, header {
     height:100%;
 }
 
-header {
+body {
     background: url("/static/img/bg-pattern.png"), linear-gradient(to right, #40A359, #077522)!important;
 }
 
