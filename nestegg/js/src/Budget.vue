@@ -36,7 +36,7 @@
                                 <input type="text" v-model="cat.name" class="form-control" @keyup.enter="cat.edit=false; save_budget()"></input>
                             </div>
                             <div class="form-group">
-                                <button class="unbutton" v-on:click="cat.edit=false"><span class="glyphicon glyphicon-ok edit-button"></span></button>
+                                <button class="unbutton" v-on:click="cat.edit=false; save_budget()"><span class="glyphicon glyphicon-ok edit-button"></span></button>
                             </div>
                             <div class="form-group">
                                 <button class="unbutton" v-on:click="budget.splice(i, 1)"><span class="glyphicon glyphicon-remove edit-button"></span></button>
@@ -58,7 +58,7 @@
                                 <input type="numeric" v-model="item.amount" class="form-control" @keyup.enter="item.edit=false; save_budget()"></input>
                             </div>
                             <div class="form-group">
-                                <button class="unbutton" v-on:click="item.edit=false"><span class="glyphicon glyphicon-ok"></span></button>
+                                <button class="unbutton" v-on:click="item.edit=false; save_budget()"><span class="glyphicon glyphicon-ok"></span></button>
                             </div>
                             <div class="form-group">
                                 <button class="unbutton" v-on:click="cat.items.splice(j, 1)"><span class="glyphicon glyphicon-remove"></span></button>
@@ -74,7 +74,6 @@
             <h2>
                 <button class="unbutton" v-on:click="budget.push({name:'',edit:true,items:[]})"><span class="glyphicon glyphicon-plus"></span></button>
             </h2>
-            <button v-on:click="save_budget()" class="btn btn-primary">Save</button>
         </template>
         <template v-if="!budget_exists">
             <p>budget does not exist</p>
@@ -171,6 +170,7 @@
                 });
             },
             save_budget () {
+                console.log("BEGIN SAVE");
                 this.axios.get("/api/budget/get/"+this.budget_year+"/"+this.budget_month).then((response) => {
                     var old = response.data.items;
                     var targ = this.client_to_server(this.budget);
@@ -245,10 +245,8 @@
                             var dt = transaction.date.split("-");
                             var cnam = transaction.budget_item[0];
                             var scnam = transaction.budget_item[1];
-                            console.log(dt);
                             if(this.budget_month+1 == dt[1] && this.budget_year == dt[0]) {
                                 this.budget.forEach((cat) => {
-                                    console.log(cat);
                                     if(cat.name == cnam){
                                         cat.used += transaction.amount;
                                         cat.items.forEach((item) => {
