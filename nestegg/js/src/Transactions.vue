@@ -27,20 +27,22 @@
         </div>
         <br>
         <table class="table table-hover">
-            <tr>
-                <th></th>
-                <th>Title</th>
-                <th>Amount</th>
-                <th>Date</th>
-                <th>Category</th>
-            </tr>
-            <tr v-for="(transaction, i) in transactions">
-                <td></td>
-                <td>{{ transaction['title'] }}</td>
-                <td>{{ transaction['amount'] }}</td>
-                <td>{{ transaction['date'] }}</td>
-                <td>{{ transaction['budget_item'].join('/') }}</td>
-            </tr>
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Amount</th>
+                    <th>Date</th>
+                    <th>Category</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="(transaction, i) in transactions">
+                    <td>{{ transaction['title'] }}</td>
+                    <td>{{ transaction['amount'] }}</td>
+                    <td>{{ transaction['date'] }}</td>
+                    <td>{{ transaction['budget_item'].join('/') }}</td>
+                </tr>
+            </tbody>
         </table>
 
     </div>
