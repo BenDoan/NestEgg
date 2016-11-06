@@ -159,7 +159,7 @@ p,table{
 	color:black!important;
 }
 h2{
-	margin-top:60px;
+	margin-top:15px;
 }
 
 @font-face {
@@ -177,4 +177,8 @@ body {
 
 #mainNav .container {
     /*background: #000;*/
+}
+
+.unvisible {
+    visibility: hidden;
 }
