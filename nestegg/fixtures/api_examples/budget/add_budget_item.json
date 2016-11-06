@@ -3,7 +3,5 @@
     "month": 10,
     "category": "utility",
     "sub_category": "gas",
-    "max": 200,
-    "type": "bucket",
-    "bucket": "socks"
+    "max": 200
 }

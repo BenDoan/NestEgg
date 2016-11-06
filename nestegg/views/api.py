@@ -30,13 +30,6 @@ def budget_create():
             i.sub_category = sub_cat_name
             i.category = cat_name
             i.max = attrs['max']
-            i.type = attrs['type']
-
-            if attrs['type'] == BUDGET_TYPES['bucket']:
-                bucket = Bucket(attrs['bucket'])
-                db.session.add(bucket)
-
-                i.bucket = bucket
 
             db.session.add(i)
     db.session.commit()
@@ -56,11 +49,6 @@ def budget_item_add():
     b.category = budget_item_dict['category']
     b.sub_category = budget_item_dict['sub_category']
     b.max = budget_item_dict['max']
-    b.type = budget_item_dict['type']
-
-    if budget_item_dict['type'] == BUDGET_TYPES['bucket']:
-        bucket = Bucket.query.filter_by(name=budget_item_dict['bucket']).first_or_404()
-        b.bucket = bucket
 
     db.session.add(b)
     db.session.commit()
@@ -80,7 +68,6 @@ def budget_get(year, month):
         i = {
             "id": budget_item.id,
             "max": budget_item.max,
-            "type": budget_item.type
         }
         budget_ret['items'][budget_item.category][budget_item.sub_category] = i
 
@@ -130,9 +117,6 @@ def transaction_create():
 
     budget_item = BudgetItem.query.filter_by(category=t_cat, sub_category=t_sub_cat).first_or_404()
     t.budget_item = budget_item
-
-    if budget_item.type == BUDGET_TYPES['bucket']:
-        budget_item.bucket.amount += t.amount
 
     db.session.add(t)
     db.session.commit()
@@ -206,4 +190,3 @@ def buckets_delete(name):
     db.session.commit()
 
     return "Good"
-
