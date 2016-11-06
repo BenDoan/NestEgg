@@ -6,7 +6,7 @@
             <button class="unbutton" v-on:click="jumpmonths(1)"><span class="glyphicon glyphicon-chevron-right"></span></button>
         </h1>
         <template v-if="budget_exists">
-            <template v-for="cat in budget">
+            <template v-for="(cat, i) in budget">
                 <h2>
                     <template v-if="!cat.edit">
                         {{ cat.name }}
@@ -15,9 +15,10 @@
                     <template v-if="cat.edit">
                         <input type="text" v-model="cat.name"></input>
                         <button class="unbutton" v-on:click="cat.edit=false"><span class="glyphicon glyphicon-ok"></span></button>
+                        <button class="unbutton" v-on:click="budget.splice(i, 1)"><span class="glyphicon glyphicon-remove"></span></button>
                     </template>
                 </h2>
-                <div class="gridbox" v-for="item in cat.items">
+                <div class="gridbox" v-for="(item, j) in cat.items">
                     <template v-if="!item.edit">
                         <span>{{ item.name }}: ${{ item.amount }}</span>
                         <button class="unbutton" v-on:click="item.edit=true"><small><span class="glyphicon glyphicon-edit edit-button"></span></small></button>
@@ -26,6 +27,7 @@
                         <input type="text" v-model="item.name"></input>
                         <input type="numeric" v-model="item.amount"></input>
                         <button class="unbutton" v-on:click="item.edit=false"><span class="glyphicon glyphicon-ok"></span></button>
+                        <button class="unbutton" v-on:click="cat.items.splice(j, 1)"><span class="glyphicon glyphicon-remove"></span></button>
                     </template>
                 </div>
                 <div class="gridbox">
