@@ -153,10 +153,15 @@ p{
 
 }
 
-
-h1,h2,h3,h4,p,table{
-	font-family: "Avenir Next Pro" !important;
+h1,h2,h3,h4,th{
 	color:green!important;
+}
+p,table{
+	font-family: "Avenir Next Pro" !important;
+	color:black!important;
+}
+h2{
+	margin-top:60px;
 }
 
 @font-face {
