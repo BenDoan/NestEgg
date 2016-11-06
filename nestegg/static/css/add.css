@@ -140,12 +140,6 @@ footer > p{
 }
 
 /*============================= signin page end =====================================*/
-/*
-.navbar-default.affix{
-	background-color:#006633!important;
-}
-*/
-
 p {
 	font-size:15px!important;
 	margin-bottom:5px!important;
@@ -169,8 +163,8 @@ h2{
 }
 
 @font-face {
-	  font-family: 'Avenir Next Pro';
-		src: url("/static/css/font/AvenirNextLTPro-Regular.otf"); /* File to be stored at your site */
+    font-family: 'Avenir Next Pro';
+    src: url("/static/css/font/AvenirNextLTPro-Regular.otf"); /* File to be stored at your site */
 }
 
 div#app {
@@ -178,6 +172,9 @@ div#app {
 }
 
 header {
-  background: url("/static/img/bg-pattern.png"), linear-gradient(to left, #006633, #00AD57)!important;
-  background: url("/static/img/bg-pattern.png"), -webkit-linear-gradient(to left, #006633, #00AD57)!important;
+    background: url("/static/img/bg-pattern.png"), linear-gradient(to right, #40A359, #077522)!important;
+}
+
+#mainNav .container {
+    /*background: #000;*/
 }
