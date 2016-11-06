@@ -1,7 +1,6 @@
 <template>
     <div id="app">
         <h2>Transactions</h2>
-        <h3>Add entry</h3>
         <div class="form-inline">
             <div class="form-group">
                 <input v-model="newTran.title" type="text" placeholder="Title" class="form-control" >

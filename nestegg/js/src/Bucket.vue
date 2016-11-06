@@ -1,7 +1,6 @@
 <template>
     <div id="app">
         <h2>Buckets</h2>
-        <h3>Add entry</h3>
         <div class="form-inline">
             <div class="form-group">
                 <input @keyup.enter="addNewBucket()" v-model="newBucket.name" type="text" placeholder="Name" class="form-control" >
