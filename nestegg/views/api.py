@@ -86,6 +86,18 @@ def budget_get(year, month):
 
     return json.dumps(budget_ret)
 
+@api.route("/budget/get/<year>/<month>/category/sub_category", methods=['GET'])
+def budget_item_del(year, month, category, sub_category):
+    budget = Budget.query.filter_by(year=int(year), month=int(month)).first_or_404()
+    budget_item = BudgetItem.query.filter_by(budget=budget,
+                                              category=category,
+                                              sub_category=sub_category).first_or_404()
+    db.session.delete(budget_item)
+    db.session.commit()
+
+    return "Good"
+
+
 @api.route("/budgetmonths/get/all", methods=['GET'])
 def budget_months_get():
     budgets = Budget.query.all()
@@ -123,6 +135,15 @@ def transaction_create():
         budget_item.bucket.amount += t.amount
 
     db.session.add(t)
+    db.session.commit()
+
+    return "Good"
+
+@api.route("/transaction/delete/<id>", methods=['GET'])
+def transaction_delete(id):
+    trans = Trans.query.filter_by(id=id).first_or_404()
+
+    db.session.delete(trans)
     db.session.commit()
 
     return "Good"
@@ -177,3 +198,12 @@ def buckets_get():
     buckets = Bucket.query.all()
     out = [(x.name, x.amount) for x in buckets]
     return json.dumps(out)
+
+@api.route("/bucket/del/<name>", methods=['GET'])
+def buckets_delete(name):
+    bucket = Bucket.query.filter_by(name=name).first_or_404()
+    db.session.delete(bucket)
+    db.session.commit()
+
+    return "Good"
+
