@@ -7,6 +7,7 @@ import VueAxios from 'vue-axios'
 import Table from './Table.vue'
 import Home from './Home.vue'
 import Budget from './Budget.vue'
+import Bucket from './Bucket.vue'
 import Transactions from './Transactions.vue'
 
 import global from './global'
@@ -14,15 +15,13 @@ import global from './global'
 Vue.use(VueRouter);
 Vue.use(VueAxios, axios)
 
-console.log(global);
-console.log(global.data);
-
 const router = new VueRouter({
     mode: "hash",
     base: __dirname,
     routes: [
         { path:"/", component: Home },
         { path:"/budget", component: Budget },
+        { path:"/bucket", component: Bucket },
         { path:"/transactions", component: Transactions }
     ]
 });

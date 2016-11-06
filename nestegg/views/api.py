@@ -20,7 +20,7 @@ def budget_create():
 
     budget = Budget()
     budget.year = int(budget_dict['year'])
-    budget.month = month_name_to_num(budget_dict['month'])
+    budget.month = int(budget_dict['month'])
     db.session.add(budget)
 
     for cat_name, sub_cat in budget_dict['items'].items():
@@ -43,23 +43,77 @@ def budget_create():
 
     return "Good"
 
+@api.route("/budget/add", methods=['POST'])
+def budget_item_add():
+    budget_item_dict = request.get_json()
+    year = int(budget_item_dict['year'])
+    month = int(budget_item_dict['month'])
+
+    budget = Budget.query.filter_by(year=year, month=month).first_or_404()
+
+    b = BudgetItem()
+    b.budget = budget
+    b.category = budget_item_dict['category']
+    b.sub_category = budget_item_dict['sub_category']
+    b.max = budget_item_dict['max']
+    b.type = budget_item_dict['type']
+
+    if budget_item_dict['type'] == BUDGET_TYPES['bucket']:
+        bucket = Bucket.query.filter_by(name=budget_item_dict['bucket']).first_or_404()
+        b.bucket = bucket
+
+    db.session.add(b)
+    db.session.commit()
+
+    return "Good"
+
 @api.route("/budget/get/<year>/<month>", methods=['GET'])
 def budget_get(year, month):
-    budget = Budget.query.filter_by(year=int(year), month=month_name_to_num(month)).first_or_404()
+    budget = Budget.query.filter_by(year=int(year), month=int(month)).first_or_404()
     budget_items = BudgetItem.query.filter_by(budget=budget).all()
 
-    budget_ret = {"year": budget.year, "month": month_num_to_name(budget.month), "items": {}}
+    budget_ret = {"year": budget.year, "month": budget.month, "items": {}}
     for budget_item in budget_items:
         if budget_item.category not in budget_ret['items']:
             budget_ret['items'][budget_item.category] = {}
 
         i = {
+            "id": budget_item.id,
             "max": budget_item.max,
             "type": budget_item.type
         }
         budget_ret['items'][budget_item.category][budget_item.sub_category] = i
 
     return json.dumps(budget_ret)
+
+@api.route("/budget/get/<year>/<month>/category/sub_category", methods=['GET'])
+def budget_item_del(year, month, category, sub_category):
+    budget = Budget.query.filter_by(year=int(year), month=int(month)).first_or_404()
+    budget_item = BudgetItem.query.filter_by(budget=budget,
+                                              category=category,
+                                              sub_category=sub_category).first_or_404()
+    db.session.delete(budget_item)
+    db.session.commit()
+
+    return "Good"
+
+
+@api.route("/budgetmonths/get/all", methods=['GET'])
+def budget_months_get():
+    budgets = Budget.query.all()
+    out =[(x.year, x.month) for x in budgets]
+
+    return json.dumps(out)
+
+@api.route("/subcategory/get/<year>/<month>", methods=['GET'])
+def subcategory_get(year, month):
+    budget = Budget.query.filter_by(year=int(year), month=int(month)).first_or_404()
+
+    budget_items = BudgetItem.query.filter_by(budget=budget).all()
+
+    out = [(x.category, x.sub_category) for x in budget_items]
+    return json.dumps(out)
+
 
 @api.route("/transaction/create", methods=['POST'])
 def transaction_create():
@@ -77,7 +131,19 @@ def transaction_create():
     budget_item = BudgetItem.query.filter_by(category=t_cat, sub_category=t_sub_cat).first_or_404()
     t.budget_item = budget_item
 
+    if budget_item.type == BUDGET_TYPES['bucket']:
+        budget_item.bucket.amount += t.amount
+
     db.session.add(t)
+    db.session.commit()
+
+    return "Good"
+
+@api.route("/transaction/delete/<id>", methods=['GET'])
+def transaction_delete(id):
+    trans = Trans.query.filter_by(id=id).first_or_404()
+
+    db.session.delete(trans)
     db.session.commit()
 
     return "Good"
@@ -88,6 +154,7 @@ def transaction_get():
     trans_out = []
     for tran in trans:
         trans_out.append({
+            "id": tran.id,
             "title": tran.title,
             "amount": tran.amount,
             "date": str(tran.date),
@@ -117,3 +184,26 @@ def homeinfo_get():
 
 
     return json.dumps(out)
+
+@api.route("/bucket/add/<name>", methods=['POST', 'GET'])
+def buckets_add(name):
+    bucket = Bucket(name)
+    db.session.add(bucket)
+    db.session.commit()
+
+    return "Good"
+
+@api.route("/bucket/get/all", methods=['GET'])
+def buckets_get():
+    buckets = Bucket.query.all()
+    out = [(x.name, x.amount) for x in buckets]
+    return json.dumps(out)
+
+@api.route("/bucket/del/<name>", methods=['GET'])
+def buckets_delete(name):
+    bucket = Bucket.query.filter_by(name=name).first_or_404()
+    db.session.delete(bucket)
+    db.session.commit()
+
+    return "Good"
+

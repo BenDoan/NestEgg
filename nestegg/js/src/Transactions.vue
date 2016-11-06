@@ -1,6 +1,29 @@
 <template>
     <div id="app">
         <h2>Transactions</h2>
+        <h3>Add entry</h3>
+        <div class="form-inline">
+            <div class="form-group">
+                <input v-model="newTran.title" type="text" placeholder="Title" class="form-control" >
+            </div>
+
+            <div class="form-group">
+                <input v-model="newTran.amount" type="text" placeholder="Amount" class="form-control">
+            </div>
+
+            <div class="form-group">
+                <input v-model="newTran.date" type="text" placeholder="Date" class="form-control">
+            </div>
+
+            <div class="form-group">
+                <select v-model="newTran.category" class="form-control">
+                    <option>utilities/gas</option>
+                    <option>utilities/water</option>
+                </select>
+            </div>
+            <button v-on:click="addNewTransaction()" class="btn">Add</button>
+        </div>
+        <br>
         <table class="table table-hover">
             <tr>
                 <th></th>
@@ -10,6 +33,7 @@
                 <th>Category</th>
             </tr>
             <tr v-for="(transaction, i) in transactions">
+                <td></td>
                 <td>{{ transaction['title'] }}</td>
                 <td>{{ transaction['amount'] }}</td>
                 <td>{{ transaction['date'] }}</td>
@@ -17,39 +41,38 @@
             </tr>
         </table>
 
-        <input type="text" placeholder="Title">
-        <input type="text" placeholder="Amount">
-        <input type="text" placeholder="Date">
-        <select>
-            <option>utilities/gas</option>
-        </select>
-        <button v-on:click="transactions.push({})">Add row</button>
     </div>
 </template>
+
 <script>
 import global from './global'
-import Table from './Table.vue'
+
 export default {
     name: "transactions",
-    components: {
-        'edi-table': Table
-    },
     data () {
        return {
         global: global,
-        keys: {
-            "date": "date",
-            "amount": "money",
-            "desc": "text"
-        },
-        rows: [],
-        transactions: {}
+        transactions: {},
+        newTran: {}
        }
     },
     created: function(){
         this.axios.get("/api/transaction/get/all").then((response) => {
             this.transactions = response.data
         })
+    },
+    methods: {
+        addNewTransaction: function (event){
+            console.log(this.newTran)
+            let newTran = this.newTran
+            newTran['budget_item'] = newTran['category'].split("/")
+
+            this.transactions.push(newTran)
+            this.newTran = {}
+
+            this.axios.post("/api/transaction/create", newTran).then((response) => {
+            })
+        }
     }
 }
 </script>

@@ -158,11 +158,12 @@ h1,h2,h3,h4,p,table{
 	font-family: "Avenir Next Pro" !important;
 	color:green!important;
 }
-h2{
-	margin-top:60px;
-}
 
 @font-face {
 	  font-family: 'Avenir Next Pro';
-		src: url("font/AvenirNextLTPro-Regular.otf"); /* File to be stored at your site */
+		src: url("/static/css/font/AvenirNextLTPro-Regular.otf"); /* File to be stored at your site */
+}
+
+div#app {
+    height:100%;
 }
