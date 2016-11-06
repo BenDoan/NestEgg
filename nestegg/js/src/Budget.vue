@@ -14,7 +14,11 @@
                         <input v-model="budget_income" type="number" min="0.01" step="0.01" max="2500" placeholder="Expected Income" class="form-control">
                     </div>
                 </div>
-                - ${{ 0 }} = ${{ budget_income }}
+                - ${{ bucket_amount }} = ${{ budget_income - bucket_amount }}
+            </div>
+            <div class="progress">
+                <div class="progress-bar progress-bar-success" v-bind:style="{width: percent(bucket_amount/budget_income)}">
+                </div>
             </div>
             <template v-for="(cat, i) in budget">
                 <h2>
@@ -74,26 +78,12 @@
                 edit: null,
                 budget: [],
                 structure: {},
-/*                    utilities: {
-                        gas: {
-                            "max": 30,
-                            "type": "monthly"
-                        },
-                        electricity: {
-                            max: 100,
-                            type: "monthly"
-                        },
-                        rent: {
-                            max: 700,
-                            type: "monthly"
-                        }
-                    }
-                },*/
                 budget_year: 0,
                 budget_month: 0,
                 budget_list: [],
                 budget_exists: true,
-                budget_income: 0
+                budget_income: 0,
+                bucket_amount: 200,
             };
         },
         created () {
@@ -120,6 +110,12 @@
             }, (error) => {
                 console.log(error);
             });
+            this.axios.get("/api/bucket/get/all").then((response) => {
+                this.bucket_amount = 0;
+                response.data.forEach((bucket) => {
+                    this.bucket_amount += bucket.monthly_amount;
+                });
+            });
         },
         watch: {
             budget_year: "update_budget",
@@ -129,6 +125,9 @@
             }
         },
         methods: {
+            percent (v) {
+                return (v*100)+"%";
+            },
             create_budget () {
                 var b = this.budget_list[this.budget_list.length-1];
                 this.axios.get("/api/budget/get/"+b[0]+"/"+b[1]).then((response) => {
@@ -176,12 +175,14 @@
                         lst.push({
                             name: subkey,
                             amount: obj[key][subkey].max,
+                            used: 0,
                             edit: false
                         });
                     });
                     out.push({
                         name: key,
                         edit: false,
+                        used: 0,
                         items: lst
                     });
                 });
@@ -205,6 +206,9 @@
                     this.budget = this.server_to_client(response.data.items);
                     this.budget_income = response.data.income;
                     this.budget_exists = true;
+                    this.axios.get("/api/transaction/get/all").then((response) => {
+                        console.log(response.data);
+                    });
                 }, (error) => {
                     this.budget_exists = false;
                     console.log(error);
@@ -300,6 +304,9 @@
 </script>
 
 <style>
+.form-inline {
+    color: black;
+}
 h1 .glyphicon, h2 .glyphicon {
     color:gray;
 }
