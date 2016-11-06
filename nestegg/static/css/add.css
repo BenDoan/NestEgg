@@ -69,7 +69,7 @@
 	margin-top:37px;
 	margin-bottom:50px;
 	height:3px;
-	width:68%;
+	width:65%;
 	float:right;
 }
 
@@ -153,13 +153,8 @@ p {
 
 }
 
-<<<<<<< HEAD
 h1,h2,h3,h4,th{
-=======
-
-h1,h2,h3,h4,p,table {
 	font-family: "Avenir Next Pro" !important;
->>>>>>> 1e61cc45153b455fc9072505eb3dd099c8712cc1
 	color:green!important;
 }
 p,table{

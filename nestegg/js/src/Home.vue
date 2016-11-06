@@ -3,9 +3,9 @@
 	<div class="holding"><h1 class="main_head">Accounts Overview</h1><div class="line"></div></div>
 	<h2>Checking</h2>
 	<div class="row">
-		<div class="col-sm-3 bucket-pod">
-			<h2>Bucket Name</h2>
-			<p>Amount Total: $100</p>
+		<div v-for="(bucket,i) in buckets"class="col-sm-3 bucket-pod">
+			<h2>{{ bucket[name] }}</h2>
+			<p>Amount Total: ${{ bucket[amount] }}</p>
 		</div>
 		<div class="col-sm-3 bucket-pod">
 			<h2>Bucket Name</h2>
@@ -121,6 +121,7 @@
 </template>
 
 <style lang="stylus">
+
 /*
 .bar_holder
 background-color:black!important;
@@ -131,6 +132,7 @@ width:100%!important;
 height:20px!important;
 background-color:greent;
  */
+
 .row
 	margin-top:60px!important;
 	padding-left:80px;
@@ -151,7 +153,6 @@ background-color:greent;
 header
 	background: url("../../static/img/bg-pattern.png"), linear-gradient(to left, #4c9760, #60b370)!important;
 
-
 </style>
 
 <script>
@@ -165,7 +166,7 @@ name: "home",
        }
     },
     created: function(){
-        this.axios.get("/api/bucket/get/all").then((response) => {
+        this.axios.get("/api/homeinfo/get").then((response) => {
             this.buckets = response.data
         })
     }
