@@ -4,24 +4,30 @@
         <h3>Add entry</h3>
         <div class="form-inline">
             <div class="form-group">
-                <input @keyup.enter="addNewBucket()" v-model="newBucket" type="text" placeholder="Title" class="form-control" >
+                <input @keyup.enter="addNewBucket()" v-model="newBucket.name" type="text" placeholder="Name" class="form-control" >
+                <div class="input-group">
+                    <div class="input-group-addon">$</div>
+                    <input @keyup.enter="addNewBucket()" v-model="newBucket.monthly_amount" placeholder="Amount" class="form-control" type="number" min="0.01" step="0.01" max="2500">
+                </div>
             </div>
             <button v-on:click="addNewBucket()" class="btn">Add</button>
         </div>
         <br>
-        <table class="table table-hover">
-            <tr>
-                <th></th>
-                <th>Bucket</th>
-                <th>Amount</th>
-                <th>Monthly amount</th>
-            </tr>
-            <tr v-for="(bucket, i) in buckets">
-                <td></td>
-                <td>{{ bucket['name'] }}</td>
-                <td>{{ bucket['amount'] }}</td>
-                <td>{{ bucket['monthly_amount'] }}</td>
-            </tr>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Bucket</th>
+                    <th>Amount</th>
+                    <th>Monthly amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="(bucket, i) in buckets">
+                    <td>{{ bucket['name'] }}</td>
+                    <td>${{ bucket['amount'] }}</td>
+                    <td>${{ bucket['monthly_amount'] }}</td>
+                </tr>
+            </tbody>
         </table>
 
     </div>
@@ -36,7 +42,7 @@ export default {
        return {
         global: global,
         buckets: {},
-        newBucket: ""
+           newBucket: {}
        }
     },
     created: function(){
@@ -47,11 +53,10 @@ export default {
     methods: {
         addNewBucket: function (event){
             let newBucket = this.newBucket
-            let bucketDict = {"name": newBucket, "amount": 0, "monthly_amount": 0}
-            this.buckets.push(bucketDict)
-            this.newBucket = ""
+            this.buckets.push(newBucket)
+            this.newBucket = {}
 
-            this.axios.post("/api/bucket/add", bucketDict).then((response) => {
+            this.axios.post("/api/bucket/add", newBucket).then((response) => {
             })
         }
     }

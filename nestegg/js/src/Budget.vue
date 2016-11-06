@@ -7,7 +7,7 @@
         </h1>
         <template v-if="budget_exists">
             <div class="form-inline">
-                Income: 
+                Income:
                 <div class="form-group">
                     <div class="input-group">
                         <div class="input-group-addon">$</div>
@@ -16,6 +16,7 @@
                 </div>
                 - ${{ bucket_amount }} = ${{ budget_income - bucket_amount }}
             </div>
+            <br>
             <div class="progress">
                 <div class="progress-bar progress-bar-success" v-bind:style="{width: percent(bucket_amount/budget_income)}">
                 </div>
@@ -27,9 +28,17 @@
                         <button class="unbutton" v-on:click="cat.edit=true"><small><span class="glyphicon glyphicon-edit edit-button"></span></small></button>
                     </template>
                     <template v-if="cat.edit">
-                        <input type="text" v-model="cat.name"></input>
-                        <button class="unbutton" v-on:click="cat.edit=false"><span class="glyphicon glyphicon-ok"></span></button>
-                        <button class="unbutton" v-on:click="budget.splice(i, 1)"><span class="glyphicon glyphicon-remove"></span></button>
+                        <div class="form-inline">
+                            <div class="form-group">
+                                <input type="text" v-model="cat.name" class="form-control" @keyup.enter="cat.edit=false; save_budget()"></input>
+                            </div>
+                            <div class="form-group">
+                                <button class="unbutton" v-on:click="cat.edit=false"><span class="glyphicon glyphicon-ok edit-button"></span></button>
+                            </div>
+                            <div class="form-group">
+                                <button class="unbutton" v-on:click="budget.splice(i, 1)"><span class="glyphicon glyphicon-remove edit-button"></span></button>
+                            </div>
+                        </div>
                     </template>
                 </h2>
                 <div class="gridbox" v-for="(item, j) in cat.items">
@@ -38,13 +47,24 @@
                         <button class="unbutton" v-on:click="item.edit=true"><small><span class="glyphicon glyphicon-edit edit-button"></span></small></button>
                     </template>
                     <template v-if="item.edit">
-                        <input type="text" v-model="item.name"></input>
-                        <input type="numeric" v-model="item.amount"></input>
-                        <button class="unbutton" v-on:click="item.edit=false"><span class="glyphicon glyphicon-ok"></span></button>
-                        <button class="unbutton" v-on:click="cat.items.splice(j, 1)"><span class="glyphicon glyphicon-remove"></span></button>
+                        <div class="form-inline">
+                            <div class="form-group">
+                                <input type="text" v-model="item.name" class="form-control" @keyup.enter="item.edit=false; save_budget()"></input>
+                            </div>
+                            <div class="form-group">
+                                <input type="numeric" v-model="item.amount" class="form-control" @keyup.enter="item.edit=false; save_budget()"></input>
+                            </div>
+                            <div class="form-group">
+                                <button class="unbutton" v-on:click="item.edit=false"><span class="glyphicon glyphicon-ok"></span></button>
+                            </div>
+                            <div class="form-group">
+                                <button class="unbutton" v-on:click="cat.items.splice(j, 1)"><span class="glyphicon glyphicon-remove"></span></button>
+                            </div>
+                        </div>
                     </template>
                 </div>
                 <div class="gridbox">
+                    <span class="unvisible">-</span>
                     <button class="unbutton" v-on:click="cat.items.push({name:'',edit:true,amount:100})"><span class="glyphicon glyphicon-plus"></span></button>
                 </div>
             </template>

@@ -2,52 +2,28 @@
 <div id="app">
 	<div class="holding"><h1 class="main_head">Accounts Overview</h1><div class="line"></div></div>
 	<h2>Checking</h2>
-	<p>349.05</p>
+	<p>$349.05</p>
 	<h2>Savings</h2>
-	<p>1039.05</p>
-	<h2 class="head">Transactions</h2>
-	<table class="table table-hover">
-		<thead>
-			<tr>
-				<th>#</th>
-				<th>Name</th>
-				<th>Type</th>
-				<th>Amount</th>
-			</tr>
-		</thead>
-		<tbody>
-		<tr>
-			<td>105</td>
-			<td>Scooter's Coffee House</td>
-			<td>Food</td>
-			<td>$6.10</td>
-		</tr>
-		<tr>
-			<td>104</td>
-			<td>BP</td>
-			<td>Car</td>
-			<td>$23.47</td>
-		</tr>
-		<tr>
-			<td>103</td>
-			<td>Scheel's</td>
-			<td>Clothing</td>
-			<td>$43.08</td>
-		</tr>
-		<tr>
-			<td>102</td>
-			<td>Runza</td>
-			<td>Food</td>
-			<td>$10.42</td>
-		</tr>
-		<tr>
-			<td>101</td>
-			<td>Famous Footwear</td>
-			<td>Clothing</td>
-			<td>$103.28</td>
-		</tr>
-		</tbody>
-	</table>
+	<p>$1039.05</p>
+	<h2>Transactions</h2>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Amount</th>
+                <th>Date</th>
+                <th>Category</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-for="(transaction, i) in transactions">
+                <td>{{ transaction['title'] }}</td>
+                <td>{{ transaction['amount'] }}</td>
+                <td>{{ transaction['date'] }}</td>
+                <td>{{ transaction['budget_item'].join('/') }}</td>
+            </tr>
+        </tbody>
+    </table>
 	<h2 class="head">Budget</h2>
 	<div class="budget">
 	</div>
@@ -99,12 +75,16 @@ name: "home",
     data () {
        return {
         global: global,
+        transactions: {},
         data: {}
        }
     },
     created: function(){
         this.axios.get("/api/homeinfo/get").then((response) => {
-            this.data= response.data
+            this.data = response.data
+        })
+        this.axios.get("/api/transaction/get/all").then((response) => {
+            this.transactions = response.data
         })
     }
 }
