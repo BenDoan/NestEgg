@@ -20,7 +20,7 @@ def budget_create():
 
     budget = Budget()
     budget.year = int(budget_dict['year'])
-    budget.month = month_name_to_num(budget_dict['month'])
+    budget.month = int(budget_dict['month'])
     db.session.add(budget)
 
     for cat_name, sub_cat in budget_dict['items'].items():
@@ -47,7 +47,7 @@ def budget_create():
 def budget_item_add():
     budget_item_dict = request.get_json()
     year = int(budget_item_dict['year'])
-    month = month_name_to_num(budget_item_dict['month'])
+    month = int(budget_item_dict['month'])
 
     budget = Budget.query.filter_by(year=year, month=month).first_or_404()
 
@@ -69,10 +69,10 @@ def budget_item_add():
 
 @api.route("/budget/get/<year>/<month>", methods=['GET'])
 def budget_get(year, month):
-    budget = Budget.query.filter_by(year=int(year), month=month_name_to_num(month)).first_or_404()
+    budget = Budget.query.filter_by(year=int(year), month=int(month)).first_or_404()
     budget_items = BudgetItem.query.filter_by(budget=budget).all()
 
-    budget_ret = {"year": budget.year, "month": month_num_to_name(budget.month), "items": {}}
+    budget_ret = {"year": budget.year, "month": budget.month, "items": {}}
     for budget_item in budget_items:
         if budget_item.category not in budget_ret['items']:
             budget_ret['items'][budget_item.category] = {}
@@ -94,7 +94,7 @@ def budget_months_get():
 
 @api.route("/subcategory/get/<year>/<month>", methods=['GET'])
 def subcategory_get(year, month):
-    budget = Budget.query.filter_by(year=int(year), month=month_name_to_num(month)).first_or_404()
+    budget = Budget.query.filter_by(year=int(year), month=int(month)).first_or_404()
 
     budget_items = BudgetItem.query.filter_by(budget=budget).all()
 

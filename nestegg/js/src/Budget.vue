@@ -1,6 +1,6 @@
 <template>
     <div id="app">
-        <h1>Budget</h1>
+        <h1>Budget for {{budget_year}}-{{budget_month+1}}</h1>
         <button class="btn btn-primary" v-on:click="addcat()"><span class="glyphicon gliphicon-add" aria-hidden="true"></span>Add category</button>
         <div v-for="nam in Object.keys(structure).sort()">
             <template v-if="edit == nam">
@@ -51,8 +51,8 @@
                     max: 0
                 },
                 edit: null,
-                structure: {
-                    utilities: {
+                structure: {},
+/*                    utilities: {
                         gas: {
                             "max": 30,
                             "type": "monthly"
@@ -66,8 +66,39 @@
                             type: "monthly"
                         }
                     }
-                }
+                },*/
+                budget_year: 0,
+                budget_month: 0,
+                budget_list: []
             };
+        },
+        created () {
+            this.axios.get("/api/budgetmonths/get/all").then((response) => {
+                if(response.data.length == 0){
+                    var now = new Date();
+                    this.axios.post("/api/budget/create",{
+                        year: now.getFullYear(),
+                        month: now.getMonth(),
+                        items: {}
+                    }).then((response) => {
+                        console.log(response);
+                        this.budget_year = now.getFullYear();
+                        this.budget_month = now.getMonth();
+                        this.structure = {};
+                    });
+                } else {
+                    response.data.sort((a,b) => {
+                        return a[0]*100+a[1] - (b[0]*100+b[1]);
+                    });
+                    this.budget_list = response.data;
+                    var latest=response.data[response.data.length-1];
+                    this.budget_year=latest[0];
+                    this.budget_month=latest[1];
+                    console.log(response.data);
+                }
+            }, (error) => {
+                console.log(error);
+            });
         },
         methods: {
             setedit (cat, subcat) {
@@ -146,4 +177,4 @@
             }
         }
     }
-    </script>
+</script>
