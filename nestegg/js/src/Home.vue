@@ -2,35 +2,9 @@
 <div id="app">
 	<div class="holding"><h1 class="main_head">Accounts Overview</h1><div class="line"></div></div>
 	<h2>Checking</h2>
-	<div class="row">
-		<div v-for="(bucket,i) in buckets"class="col-sm-3 bucket-pod">
-			<h2>{{ bucket[name] }}</h2>
-			<p>Amount Total: ${{ bucket[amount] }}</p>
-		</div>
-		<div class="col-sm-3 bucket-pod">
-			<h2>Bucket Name</h2>
-			<p>Amount Total: $100</p>
-		</div>
-		<div class="col-sm-3 bucket-pod">
-			<h2>Bucket Name</h2>
-			<p>Amount Total: $100</p>
-		</div>
-	</div>
+	<p>349.05</p>
 	<h2>Savings</h2>
-	<div class="row">
-		<div class="col-sm-3 bucket-pod">
-			<h2>Bucket Name</h2>
-			<p>Amount Total: $100</p>
-		</div>
-		<div class="col-sm-3 bucket-pod">
-			<h2>Bucket Name</h2>
-			<p>Amount Total: $100</p>
-		</div>
-		<div class="col-sm-3 bucket-pod">
-			<h2>Bucket Name</h2>
-			<p>Amount Total: $100</p>
-		</div>
-	</div>
+	<p>1039.05</p>
 	<h2 class="head">Transactions</h2>
 	<table class="table table-hover">
 		<thead>
@@ -43,95 +17,61 @@
 		</thead>
 		<tbody>
 		<tr>
-			<td>1</td>
-			<td>Transaction Name</td>
-			<td>Type</td>
-			<td>$Amount</td>
+			<td>105</td>
+			<td>Scooter's Coffee House</td>
+			<td>Food</td>
+			<td>$6.10</td>
 		</tr>
 		<tr>
-			<td>2</td>
-			<td>Transaction Name</td>
-			<td>Type</td>
-			<td>$Amount</td>
+			<td>104</td>
+			<td>BP</td>
+			<td>Car</td>
+			<td>$23.47</td>
 		</tr>
 		<tr>
-			<td>3</td>
-			<td>Transaction Name</td>
-			<td>Type</td>
-			<td>$Amount</td>
+			<td>103</td>
+			<td>Scheel's</td>
+			<td>Clothing</td>
+			<td>$43.08</td>
 		</tr>
 		<tr>
-			<td>4</td>
-			<td>Transaction Name</td>
-			<td>Type</td>
-			<td>$Amount</td>
+			<td>102</td>
+			<td>Runza</td>
+			<td>Food</td>
+			<td>$10.42</td>
 		</tr>
 		<tr>
-			<td>5</td>
-			<td>Transaction Name</td>
-			<td>Type</td>
-			<td>$Amount</td>
+			<td>101</td>
+			<td>Famous Footwear</td>
+			<td>Clothing</td>
+			<td>$103.28</td>
 		</tr>
 		</tbody>
 	</table>
 	<h2 class="head">Budget</h2>
-	<table class="table table-hover">
-		<thead>
-			<tr>
-				<th>#</th>
-				<th>Name</th>
-				<th>Type</th>
-				<th>Amount</th>
-			</tr>
-		</thead>
-		<tbody>
-		<tr>
-			<td>1</td>
-			<td>Transaction Name</td>
-			<td>Type</td>
-			<td>$Amount</td>
-		</tr>
-		<tr>
-			<td>2</td>
-			<td>Transaction Name</td>
-			<td>Type</td>
-			<td>$Amount</td>
-		</tr>
-		<tr>
-			<td>3</td>
-			<td>Transaction Name</td>
-			<td>Type</td>
-			<td>$Amount</td>
-		</tr>
-		<tr>
-			<td>4</td>
-			<td>Transaction Name</td>
-			<td>Type</td>
-			<td>$Amount</td>
-		</tr>
-		<tr>
-			<td>5</td>
-			<td>Transaction Name</td>
-			<td>Type</td>
-			<td>$Amount</td>
-		</tr>
-		</tbody>
-	</table>
+	<div class="budget">
+		{{ data["total_spent"] }}	{{ data["total_budgeted"] }}
+	</div>
+	<h2>Buckets</h2>
+	<div class="row">
+		<div v-for="(bucket,i) in data['buckets']" class="col-sm-3 bucket-pod">
+			<h2>{{ bucket[name] }}</h2>
+			<p>Amount Total: ${{ bucket[amount] }}</p>
+		</div>
+	</div>
 </div>
 </template>
 
 <style lang="stylus">
 
-/*
 .bar_holder
-background-color:black!important;
-height:20px!important;
-width:100%!important;
+	background-color:black!important;
+	height:20px!important;
+	width:100%!important;
 
 .progress-bar
-height:20px!important;
-background-color:greent;
- */
+	height:20px!important;
+	background-color:greent;
 
 .row
 	margin-top:60px!important;
@@ -161,13 +101,12 @@ name: "home",
     data () {
        return {
         global: global,
-        buckets: {},
-        newBucket: ""
+        data: {}
        }
     },
     created: function(){
         this.axios.get("/api/homeinfo/get").then((response) => {
-            this.buckets = response.data
+            this.data= response.data
         })
     }
 }
