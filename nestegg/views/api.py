@@ -111,6 +111,9 @@ def transaction_create():
     budget_item = BudgetItem.query.filter_by(category=t_cat, sub_category=t_sub_cat).first_or_404()
     t.budget_item = budget_item
 
+    if budget_item.type == BUDGET_TYPES['bucket']:
+        budget_item.bucket.amount += t.amount
+
     db.session.add(t)
     db.session.commit()
 
@@ -150,4 +153,18 @@ def homeinfo_get():
     out['total_budgeted'] = sum(x.max for x in budget_items)
 
 
+    return json.dumps(out)
+
+@api.route("/bucket/add/<name>", methods=['POST', 'GET'])
+def buckets_add(name):
+    bucket = Bucket(name)
+    db.session.add(bucket)
+    db.session.commit()
+
+    return "Good"
+
+@api.route("/bucket/get/all", methods=['GET'])
+def buckets_get():
+    buckets = Bucket.query.all()
+    out = [(x.name, x.amount) for x in buckets]
     return json.dumps(out)
